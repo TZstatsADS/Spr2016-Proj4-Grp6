@@ -1,0 +1,94 @@
+"<?xml version=\"1.0\" ?>
+<ItemSearchResponse xmlns=\"http://webservices.amazon.com/AWSECommerceService/2011-08-01\">
+<OperationRequest>
+    <RequestId>29410783-6ae4-480d-86c0-363b3b67d457</RequestId>
+    <Arguments>
+        <Argument Name=\"AWSAccessKeyId\" Value=\"AKIAJCYPY2UUDPZA6W2Q\"></Argument>
+        <Argument Name=\"AssociateTag\" Value=\"jzjz-20\"></Argument>
+        <Argument Name=\"Keywords\" Value=\"B003AI2VGA\"></Argument>
+        <Argument Name=\"Operation\" Value=\"ItemSearch\"></Argument>
+        <Argument Name=\"ResponseGroup\" Value=\"ItemAttributes\"></Argument>
+        <Argument Name=\"SearchIndex\" Value=\"All\"></Argument>
+        <Argument Name=\"Service\" Value=\"AWSECommerceService\"></Argument>
+        <Argument Name=\"Timestamp\" Value=\"2016-04-04T01:08:23.000Z\"></Argument>
+        <Argument Name=\"Version\" Value=\"2011-08-01\"></Argument><Argument Name=\"Signature\" Value=\"aF3FlXSBIVcIySkEbS0MIkmiS1SazZVX6QeVjg5lZBQ=\"></Argument>
+    </Arguments>
+    <RequestProcessingTime>0.0771870000000000</RequestProcessingTime>
+</OperationRequest>
+
+<Items>
+    <Request>
+        <IsValid>True</IsValid>
+        <ItemSearchRequest>
+            <Keywords>B003AI2VGA</Keywords>
+            <ResponseGroup>ItemAttributes</ResponseGroup>
+            <SearchIndex>All</SearchIndex>
+        </ItemSearchRequest>
+    </Request>
+    <TotalResults>1</TotalResults>
+    <TotalPages>1</TotalPages>
+    <MoreSearchResultsUrl>http://www.amazon.com/gp/redirect.html?linkCode=xm2&amp;SubscriptionId=AKIAJCYPY2UUDPZA6W2Q&amp;location=http%3A%2F%2Fwww.amazon.com%2Fgp%2Fsearch%3Fkeywords%3DB003AI2VGA%26url%3Dsearch-alias%253Daws-amazon-aps&amp;tag=jzjz-20&amp;creative=386001&amp;camp=2025</MoreSearchResultsUrl>
+    <Item>
+        <ASIN>B003AI2VGA</ASIN>
+        <DetailPageURL>http://www.amazon.com/The-Virgin-Juarez-Minnie-Driver/dp/B003AI2VGA%3FSubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB003AI2VGA</DetailPageURL>
+        <ItemLinks><ItemLink>
+            <Description>Technical Details</Description>
+            <URL>http://www.amazon.com/The-Virgin-Juarez-Minnie-Driver/dp/tech-data/B003AI2VGA%3FSubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>Add To Baby Registry</Description>
+            <URL>http://www.amazon.com/gp/registry/baby/add-item.html%3Fasin.0%3DB003AI2VGA%26SubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>Add To Wedding Registry</Description>
+            <URL>http://www.amazon.com/gp/registry/wedding/add-item.html%3Fasin.0%3DB003AI2VGA%26SubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>Add To Wishlist</Description>
+            <URL>http://www.amazon.com/gp/registry/wishlist/add-item.html%3Fasin.0%3DB003AI2VGA%26SubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>Tell A Friend</Description>
+            <URL>http://www.amazon.com/gp/pdp/taf/B003AI2VGA%3FSubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>All Customer Reviews</Description>
+            <URL>http://www.amazon.com/review/product/B003AI2VGA%3FSubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        <ItemLink>
+            <Description>All Offers</Description>
+            <URL>http://www.amazon.com/gp/offer-listing/B003AI2VGA%3FSubscriptionId%3DAKIAJCYPY2UUDPZA6W2Q%26tag%3Djzjz-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB003AI2VGA</URL>
+        </ItemLink>
+        </ItemLinks>
+        
+        <ItemAttributes>
+            <Actor>Minnie Driver</Actor>
+            <Actor>Ana Claudia Talancon</Actor>
+            <Actor>Esai Morales</Actor>
+            <Actor>Angus Macfayden</Actor>
+            <AudienceRating>R (Restricted)</AudienceRating>
+            <Binding>Amazon Video</Binding>
+            <Creator Role=\"Writer\">Michael Fallon</Creator>
+            <Director>Kevin James Dobson</Director>
+            <Genre>Drama</Genre>
+            <IsAdultProduct>0</IsAdultProduct>
+            <Languages>
+                <Language>
+                    <Name>English</Name>
+                    <Type>Spoken</Type>
+                </Language>
+                <Language>
+                    <Name>English</Name>
+                    <Type>Unknown</Type>
+                </Language>
+            </Languages>
+            <ProductGroup>Movie</ProductGroup>
+            <ProductTypeName>DOWNLOADABLE_MOVIE</ProductTypeName>
+            <ReleaseDate>2008-04-03</ReleaseDate>
+            <RunningTime Units=\"minutes\">89</RunningTime>
+            <Studio>First Look</Studio>
+            <Title>The Virgin of Juarez</Title>
+        </ItemAttributes>
+    </Item>
+</Items>
+</ItemSearchResponse>"
