@@ -150,3 +150,19 @@ search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecr
 }
 
 gg<-search.amazon(Keywords="B003AI2VGA",AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q",AWSsecretkey="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", AssociateTag="jzjz-20")
+doc<-xmlParse(gg)
+output<-function(att){
+  attnode = xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][[att]]
+  attvalue<-as.character(sapply(xmlChildren(attnode), function(node) xmlValue(node)))
+  return(attvalue)
+}
+title<-output("Title")
+genre<-output("Genre")
+language<-output("Languages")
+rate<-output("AudienceRating")
+# Might need to bind PRODUCT ID
+product_i<-cbind(title,genre,language,rate)
+
+# Example of getting an info
+# titlenode=xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][["Title"]]
+# title<-as.character(sapply(xmlChildren(titlenode), function(node) xmlValue(node)))
