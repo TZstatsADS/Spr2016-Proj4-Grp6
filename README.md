@@ -1,6 +1,6 @@
 ##Project 4: Collective Intelligence Title
 
-TEXT TEXT TEXT
+:octocat: TEXT TEXT TEXT
 
 ##Group Members
 
