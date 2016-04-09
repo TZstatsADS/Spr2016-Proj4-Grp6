@@ -1,3 +1,4 @@
+rm(list=ls())
 library("XML")
 library("RCurl")
 search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup = 'ItemAttributes', Operation = 'ItemSearch'){
@@ -158,10 +159,9 @@ output<-function(att){
 }
 title<-output("Title")
 genre<-output("Genre")
-language<-output("Languages")
-rate<-output("AudienceRating")
+# actors<-output("Actor")
 # Might need to bind PRODUCT ID
-product_i<-cbind(title,genre,language,rate)
+product_i<-cbind(title,genre)
 
 # Example of getting an info
 # titlenode=xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][["Title"]]
