@@ -7,16 +7,16 @@ output: html_document
 
 ## Set up
 ```{r}
-setwd("~/Data Science/project4-team6/lib")
+setwd("~/Data Science/project4-team6/data")
 library(igraph)
 library(bipartite)
 library(intergraph)
 library(rPython)
 ```
 
-## Call python
+## load python code
 ```{r}
-python.load("Recommendation.py")
+python.load("../lib/Recommendation.py")
 ```
 
 ## Read in the graph as adjacency matrix
@@ -42,7 +42,7 @@ rm(list = ls())
 ## Recurssively calculating the distance 
 ```{r}
 load("adjMat.RData")
-#system.time(computeModules(adjMat,steps=10))
+system.time(computeModules(adjMat,steps=10))
 ```
 
 ## Tryout codes
