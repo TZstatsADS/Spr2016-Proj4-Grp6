@@ -18,7 +18,9 @@ library(intergraph)
 data = read.csv("datawithnameandgenre.csv")
 attach(data)
 matData = cbind(product_productid,review_userid,review_score,V1.1)
+colnames(matData) = c("pId","uId","score","name")
 save(matData,file = "matData.RData")
+load("matData.RData")
 g <- make_empty_graph() +
                  vertices(letters[1:10]) +
                  vertices("foo", "bar", "bar2", "foobar2")
