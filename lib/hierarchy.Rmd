@@ -11,6 +11,12 @@ setwd("~/Data Science/project4-team6/data")
 library(igraph)
 library(bipartite)
 library(intergraph)
+library(rPython)
+```
+
+## load python code
+```{r}
+python.load("../lib/Recommendation.py")
 ```
 
 ## Read in the graph as adjacency matrix
@@ -24,16 +30,22 @@ rownames(adjMat)=levels(uId)
 for(i in 1:length(uId)){
   adjMat[uId[i],pId[i]]=score[i]
 }
+## Save adjacency matrix
+save(adjMat,file = "adjMat.RData")
 ## See the bipartate plot
 plotweb(adjMat[1:100,])
+playData = adjMat[1:100,]
+## Clean up
+rm(list = ls())
 ```
 
-## Build the hierarchy tree
+## Recurssively calculating the distance 
 ```{r}
-
+load("adjMat.RData")
+system.time(computeModules(adjMat,steps=10))
 ```
 
-## Waste codes
+## Tryout codes
 ```{r}
 # data = read.csv("datawithnameandgenre.csv")
 # attach(data)
@@ -47,25 +59,44 @@ plotweb(adjMat[1:100,])
 #           g <- g + edge("a", "b",weight = 3)
 # 
 # as.matrix.igraph(g,matrix.type = "adjacency")         
-# sampledata <- rbind(
-#     c(1,2,4),
-#     c(1,3,2),
-#     c(2,1,4),
-#     c(2,3,4),
-#     c(2,4,1),
-#     c(2,5,2),
-#     c(3,1,2),
-#     c(3,2,4),
-#     c(4,2,1),
-#     c(5,2,2),
-#     c(5,6,1),
-#     c(6,5,1))
+sampledata <- rbind(
+    c(1,2,4),
+    c(1,3,2),
+    c(2,1,4),
+    c(2,3,4),
+    c(2,4,1),
+    c(2,5,2),
+    c(3,1,2),
+    c(3,2,4),
+    c(4,2,1),
+    c(5,2,2),
+    c(5,6,1),
+    c(6,5,1))
 # playdata = cbind(data$product_productid,data$review_userid,data$review_score)[1:500,]
-# 
-# data(Safariland)
-# plotweb(Safariland)
-# clustering_tm(Safariland)
-# compart(Safariland)
+# system.time(adjMat = frame2webs(matData,varnames = c("uId","pId","score")))
+data(Safariland)
+plotweb(Safariland)
+clustering_tm(Safariland)
+compart(Safariland)
+fc(Safariland)
+fc(playData)
+computeModules()
+
+data(small1976)
+res <- computeModules(small1976)
+plotModuleWeb(res)
 
 ```
+
+## Summary of a few clustring methods
+
+### computeModules from packages Bipartite
+```{r }
+computeModules()
+```
+
+Pros: 1 Comes from a package specialized bipartite graphs. So the algorithm is modified to suit "higher species" and "lower species".
+      2 Easily find the among-module connectivity using czvalue() after computing the modules.
+      
+Cons: Way tooooooo slow. Can't even finish the calculation for 10 iterations without killing my computer. (default is 1000000 iterations)
 
