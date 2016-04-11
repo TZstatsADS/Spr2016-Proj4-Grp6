@@ -85,7 +85,7 @@ get_similarity <- function(movie1,movie2){
 #########################################
 
 #now given a movie we try to find the one which has the greatest similarity to it:
-movie2<-"Brokeback Mountain"
+movie2<-"Planet of the Apes"
 t<-length(unique(data[,"V1.1"]))
 #finally we calculate the similarity of two given movies:
 similarity <- data.frame("V1.1"=NA,"similarity"=NA)
@@ -98,9 +98,8 @@ for (i in 1:t){
 }
 
 #show the name of the movie that has the highest similarity to the given movie:
-similarity %>% na.omit()
+similarity <- na.omit(similarity)
 similarity[which.max(similarity[,2]),1]
-
 
 ###################
 #Remains to improve:
