@@ -108,7 +108,7 @@ get_similarity <- function(movie1,movie2){
   
   #if we only focus on the movie with the same genere:
   #which really saves time
-  movie2<-"The Ten Commandments"
+  movie2 <- "Brokeback Mountain"
   index<-which(data[,"V1.1"]==movie2)[1]
   data2<-data[which(data[,"V2"]==data[index,"V2"]),]
   t<-length(unique(data2[,"V1.1"]))
