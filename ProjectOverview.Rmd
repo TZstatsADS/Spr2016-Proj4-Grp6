@@ -40,28 +40,56 @@ Additionally, the following statistic very much influenced how we moved forward:
 This is very applicable in propelling us to provide a movie reccommendation app, which would help both movie-goers in theaters (becuase you can rate movies on Amazon through pre-order dvds after people saw it in theater), and people at home.
 
 #Setting Up The Environment: Introducing The Data
+##Data Exploration
+NICOLE INSERT YOUR DATA RESULTS AND GRAPHS HERE!!
+
+###The 0 Review Movies
+INSERT
+
+###The Five Star Reviews
+INSERT
+
 ##Packages Used
 The following packages were used in our project
 
 ```{r, message=FALSE, warning=FALSE}
-#Insert
-
+library(dplyr)
+library(XML)
+library(stringr)
+library(tm)
+library(seqinr)
+library(bitops)
+library(RCurl)
+library(digest)
+library(data.table)
 ```
 
 ##Data Cleaning Overview
-INSERT DATA CLEANING STEPS
+1. Import all data from SNAP
 
-##Data Exploratory Results
-NICOLE INSERT YOUR DATA RESULTS AND GRAPHS HERE!!
+2. Used the Amazon API to pull all the movie data
+
+3. Preprocessing:
+  -XML Parsing of desired info (ie: review score), and removing of undesired info (ie: price)
+  -Also adding in director and cast name
+  
+4. Cleaning and Subsetting
+  - Removed movies with review score of 0 for our algorithm
+  -Kept this information for our exploratory analysis
 
 ##Amazon API
 ![Amazon API](https://python-amazon-product-api.readthedocs.org/en/0.2.3/_images/banner.png)
 
-INSERT HOW WE USED API
- 
-##XML Parsing
-INSERT HERE
+We used the Amazon API to pull information about the reviews and movies based on the SNAP-provided product and review ID's.
 
+We used the API only on the movies that had at least 1 review, which is roughly 1/4 of the provided data.
+
+The cap for Amazon was at 3,600 calls an hour, so this took us about 13 hours to run the subsetted data.
+
+##XML Parsing
+The XML parsing was our main source of preprocessing. This "separated" out the information we wanted on each of the movies, and formatted it ina way we could manipulate in R. We also removed factors and information that we would not be using in our algorithm or analysis. 
+
+***
 
 #The Reccommendation System
 ##The Basic Idea Behind Finding "Similar" Movies
@@ -73,8 +101,16 @@ data <- read.csv("C:\\Users\\NMLJ\\Documents\\GitHub\\project4-team6\\data\\data
 
 head(data,1)
 ```
+The covariates are:
 
-To determine which factor should be used in what should be consdiered similar, after trying a few methods and seeing what type of results we got, we decided on using **Reviewer's Score**
+-Product ID
+-Review User ID
+-Review Helpfulness
+-Review Score
+-Name of Movie
+-Review Score 
+
+To determine which factors should be used in what should be consdiered similar, after trying a few methods and seeing what type of results we got, we decided on using **Reviewer's Score**
 
 ##Why Review Score?
 What we determined was that if the scores of two movies are close (taking into account number of reviews), then the movies can be determined to be similar.
@@ -119,6 +155,12 @@ We would also love to expand into searching by *director, cast members, or sount
 Looking into an app that gives multiple output suggestions would also be preferred.
 
 #The App
+*For the algorithm formulation, we used both Python and R; See Main.R for the executable code*
+##The Trials and Errors
+
+##When to Search
+
+##The Demo
 To demonstrate the app, we will show you what happens if you look into **The Last Samurai**
 
 ![Last Samurai Demo](https://upload.wikimedia.org/wikipedia/en/c/c6/The_Last_Samurai.jpg)
