@@ -6,8 +6,6 @@
 from alignment.sequence import Sequence
 from alignment.vocabulary import Vocabulary
 from alignment.sequencealigner import SimpleScoring, GlobalSequenceAligner
-import heapq
-import numpy as np
 
 def recommendation(name, movies):
     """Find the top ten neartest match in a list of movie names
