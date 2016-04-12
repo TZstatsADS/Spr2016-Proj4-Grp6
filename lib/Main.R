@@ -1,5 +1,7 @@
 ## Set up
 setwd("~/Data Science/project4-team6/data")
+# source("https://bioconductor.org/biocLite.R")
+# biocLite("Biostrings")
 library(dplyr)
 library(stringr)
 library(tm)
