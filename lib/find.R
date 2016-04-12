@@ -1,3 +1,6 @@
+# Set up 
+source("../lib/toWord.R")
+source("../lib/vIn.R")
 movies = levels(matData$name)
 moviesW = sapply(movies,toWord)
 ## Public func

@@ -1,22 +1,18 @@
 spellCheck = function(keyW,dicW,dicC){
-  keyC = lapply(keyW, strsplit, split="")
+  keyC = lapply(keyW, toCharacter)
   keyPre = vector()
   for(i in 1:length(keyC)){
-    score = lapply(dicC,vIn,keyC)
+    score = lapply(dicC,vIn,keyC[[i]])
     score = sapply(score,sum)
-    print(max(score))
     if(max(score)==0){
       return()
     }
-    thresh = sort(score, decreasing=TRUE)[10]
+    thresh = sort(score, decreasing=TRUE)[5]
     ind = (score >= max(0, thresh))
-    dicA = dicC[ind]
-    print(dicA)
-    align=lapply(dicA,pairwiseAlignment,subject=keyC,type="local",gapOpening=0,gapExtension=0)
-    score=lapply(align,score)
-    print(score)
-    pre = which.max(score)
-    pre = dicW[ind[pre]]
+    dicA = dicW[ind]
+    score=lapply(dicA,align,string2=keyW)
+    #print(score)
+    pre = dicA[which.max(score)]
     keyPre = c(keyPre, pre)
   }
   key = paste(keyPre, sep=" ")
