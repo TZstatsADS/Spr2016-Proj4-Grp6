@@ -1,0 +1,26 @@
+---
+title: "Exploratory Analysis"
+author: "Nicole LaPointe Jameson"
+date: "April 13, 2016"
+output: html_document
+---
+#Big picture
+
+```{r}
+#INSERT
+
+```
+
+
+##Movies with no reviews
+```{r}
+#Insert
+
+
+```
+
+##Movies with 5-star reviews
+```{r}
+#H
+
+```
