@@ -1,4 +1,11 @@
-find = function(key,moviesW,movies){
+movies = levels(matData$name)
+moviesW = sapply(movies,toWord)
+## Public func
+find = function(key){
+  findP(key,moviesW,movies)
+}
+## Private func
+findP = function(key,moviesW,movies){
   keyW = toWord(key)
   score = lapply(moviesW,vIn,keyW)
   score = sapply(score,sum)
