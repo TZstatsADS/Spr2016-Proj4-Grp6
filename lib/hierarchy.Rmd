@@ -27,16 +27,9 @@ library(qdap)
 ## read in movie names
 load("matData.RData")
 movies = levels(matData$name)
-moviesW = sapply(movies,toCharacter)
+moviesW = sapply(movies,toWord)
 
-find = function(key,moviesW,movies){
-  keyW = toWord(key)
-  score = lapply(moviesW,vIn,keyW)
-  score = sapply(score,sum)
-  thresh = sort(score, decreasing=TRUE)[5]
-  ind = score>=thresh
-  return(movies[ind])
-}
+
 
 ```
 
