@@ -8,15 +8,36 @@ output: html_document
 ## Set up
 ```{r}
 setwd("~/Data Science/project4-team6/data")
-library(igraph)
-library(bipartite)
-library(intergraph)
-library(rPython)
+source("https://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
+library(seqinr)
+#library(igraph)
+#library(bipartite)
+#library(intergraph)
+#library(rPython)
+library(Biostrings)
+library(dplyr)
+library(stringr)
+library(tm)
+library(qdap)
 ```
+
+## Word alignment in R
+```{r}
+## read in movie names
+load("matData.RData")
+movies = levels(matData$name)
+moviesW = sapply(movies,toWord)
+
+
+
+```
+
 
 ## load python code
 ```{r}
 python.load("../lib/Recommendation.py")
+
 ```
 
 ## Read in the graph as adjacency matrix
@@ -86,6 +107,25 @@ data(small1976)
 res <- computeModules(small1976)
 plotModuleWeb(res)
 
+system.time(lapply(movies,match,seq2 = "beautiful"))
+test = lapply(movies,match,seq2 = "beautiful")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
+library("seqinr")
+seq1 = "What a beautiful"
+seq2 = "What a"
+seq3 = "What a beautiful day"
+seq4 = "What day"
+seq1string = tolower(seq1)
+seq2string = tolower(seq2)
+seq3string = tolower(seq3)
+seq4string = tolower(seq4)
+library("Biostrings")
+
+globalAlign
+globalAlign 
+pid(globalAlign, type = "PID3")
 ```
 
 ## Summary of a few clustring methods

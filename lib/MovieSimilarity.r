@@ -9,7 +9,6 @@
 #
 #          [,1]
 #[1,] 0.9479966
-
 data<-read.csv("datawithnameandgenre.csv")
 #Currently you must enter the name of the moviw with a quotation mark
 #otherwise you will get a warning message: object undefined
@@ -19,9 +18,11 @@ common_reviewers_by_id <- function(movie1,movie2) {
   reviews2 <- subset(data, V1.1==movie2)
   reviewers_sameset <- intersect(reviews1[,'review_userid'],
                                  reviews2[,'review_userid'])
-  if (length(reviewers_sameset)==0) {
+  #if 0 common user, print NA
+  #if one common user,then it is the same person, which also makes no sense, print NA
+  if (length(reviewers_sameset)<2) {
     NA
-    }
+  }
   else{
     reviewers_sameset
   }
@@ -31,21 +32,25 @@ common_reviewers_by_id <- function(movie1,movie2) {
 get_review_metrics <- function(movie,id){
   metrics<-subset(data,V1.1== movie & review_userid %in% id)
   #reorder the reviewers
-  metrics<-metrics[order(metrics$review_userid),]
-  metrics<-metrics[,c("review_helpfulness","review_score")]
+  #there's scenarios when the same user rate the same movie for more than once, causing the two metrics
+  #differ in length, thus, we use unique() to remove duplicate items.
+  metrics<-metrics[order(unique(metrics$review_userid)),]
+  # metrics<-metrics[,c("review_helpfulness","review_score")]
+ # metrics %>% distinct("review_userid")
   metrics
 }
 
+
 #finally we calculate the similarity of two given movies:
-get_similarity <- function(movie1,movie2){
+get_similarity <- function(movie1){
   #get the common reviewer of the two movies:
   id <- common_reviewers_by_id(movie1, movie2)
   #in case the two movies have no common reviewers???
-  for (j in 1:length(id)) {
-   if (is.na(id[j])) {
+
+   if (any(is.na(id))) {
     return (NA)
-   }
-  }
+   }else{
+  
   #get the review scores of the two movies of these common users:
   metrics1 <- get_review_metrics(movie1,id)
   metrics2 <- get_review_metrics(movie2,id)
@@ -62,7 +67,79 @@ get_similarity <- function(movie1,movie2){
   #the following equation if the cross product of the two vectors devided by
   #the product of the vector norms
   similarity <- product(metrics1)%*%product(metrics2)/(product(metrics1)%*%product(metrics1)*product(metrics2)%*%product(metrics2))^0.5
+  #get rid of the value 1
+  if (similarity == 1){
+    similarity = NA
+  }
   similarity
   }
+}
+
   
+#########################################
+########### the implementation ##########
+#########################################
+
+#Scenario1: USE APPLY FUNCTION + ALL THE MOVIES
+movie2<-"Inception"
+system.time(similarity<-sapply(as.matrix(unique(data[,"V1.1"])),get_similarity))
+similarity <- na.omit(similarity)
+names(similarity[which.max(similarity)])
+
+
+
+#Scenario2: USE APPLY FUNCTION + MOVIES WITH THE SAME GENRE
+movie2<-"The Last Samurai"
+index<-which(data[,"V1.1"]==movie2)[1]
+data2<-data[which(data[,"V2"]==data[index,"V2"]),]
+system.time(similarity<-sapply(as.matrix(unique(data2[,"V1.1"])),get_similarity))
+similarity <- na.omit(similarity)
+names(similarity[which.max(similarity)])
+
+
+#Scenario3: USE FOR LOOP + ALL MOVIES
+  #now given a movie we try to find the one which has the greatest similarity to it:
+  movie2<-"Brokeback Mountain"
+
+  t<-length(unique(data[,"V1.1"]))
+  #finally we calculate the similarity of two given movies:
+  similarity <- data.frame("V1.1"=NA,"similarity"=NA)
   
+  for (i in 1:t){
+    movie1<-as.matrix(unique(data[,"V1.1"]))[i]
+    similarity[i,1] <- movie1
+    similarity[i,2] <- get_similarity(movie1,movie2)
+    print(i)
+  }
+  
+  #show the name of the movie that has the highest similarity to the given movie:
+  similarity <- na.omit(similarity)
+  similarity[which.max(similarity[,2]),1]
+  #record the time consumed  
+  ptm <- proc.time()
+  
+
+#Scenario4: USE FOR LOOP + MOVIES WITH THE SAME GENRE
+  
+  #if we only focus on the movie with the same genere:
+  #which really saves time
+  movie2 <- "Brokeback Mountain"
+  index<-which(data[,"V1.1"]==movie2)[1]
+  data2<-data[which(data[,"V2"]==data[index,"V2"]),]
+  t<-length(unique(data2[,"V1.1"]))
+
+  similarity <- data.frame("V1.1"=NA,"similarity"=NA)
+  for (i in 1:t){
+    movie1<-as.matrix(unique(data2[,"V1.1"]))[i]
+    similarity[i,1] <- movie1
+    similarity[i,2] <- get_similarity(movie1,movie2)
+    print(i)
+  }
+  similarity <- na.omit(similarity)
+  similarity[which.max(similarity[,2]),1]
+
+  
+  ###################
+  #Remains to improve:
+  #The minimum number of common users
+  #If we could stop the current loop as soon as we discover an NA.
