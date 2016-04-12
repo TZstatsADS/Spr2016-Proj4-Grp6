@@ -35,7 +35,8 @@ When looking at current research available for movie watching habits, Google and
 Taking these into account, we had ready information for plot/genre, as well as review score, two core factors that certain groups of movie watchers deemed important.
 
 Additionally, the following statistic very much influenced how we moved forward:
-**70% of moviegoers don't actually choose the movie the'll see until they're at the teater**
+
+- **70% of moviegoers don't actually choose the movie the'll see until they're at the theater**
 
 This is very applicable in propelling us to provide a movie reccommendation app, which would help both movie-goers in theaters (becuase you can rate movies on Amazon through pre-order dvds after people saw it in theater), and people at home.
 
@@ -76,7 +77,7 @@ library(data.table)
   
 4. Cleaning and Subsetting
   - Removed movies with review score of 0 for our algorithm
-  -Kept this information for our exploratory analysis
+  - Kept this information for our exploratory analysis
 
 ##Amazon API
 ![Amazon API](https://python-amazon-product-api.readthedocs.org/en/0.2.3/_images/banner.png)
