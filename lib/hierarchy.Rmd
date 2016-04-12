@@ -122,7 +122,7 @@ seq2string = tolower(seq2)
 seq3string = tolower(seq3)
 seq4string = tolower(seq4)
 library("Biostrings")
-
+align=pairwiseAlignment(seq1string, seq2string)
 globalAlign
 globalAlign 
 pid(globalAlign, type = "PID3")
