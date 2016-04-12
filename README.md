@@ -1,6 +1,7 @@
-##Project 4: Collective Intelligence Title
+##Project 4: Collective Intelligence: A Movie For You!
+*Please see separate "Project Overview" for full outline*
 
-:octocat: TEXT TEXT TEXT
+:octocat: 
 
 ##Group Members
 
@@ -16,13 +17,9 @@
 
 ##Project Abstract
 
-In this project, we will explore relational data where the data were collected to have information on a set of individuals and on their relations. Part of the big data hype has been fueled by the availability of the huge amount of online human generated information on social networks, individual rating/preferences on products, opinions and views shared via social media (such as facebook, twitter, etc). Topics in this area include
+In this project, we will explore relational data where the data were collected to have information on a set of individuals and on their relations. Using this data, we have produced an interactive Shiny app so consumers can utlize the information provided with Amazon movie reviews to find other simialr titles that suit their interests.
 
-- Collective filtering
-- Clustering/community detection
-- Network analysis
-- Identity resolution
 
 ##Contribution Statement
 
-TEXT TEXT TEXT
+All team members contributed in all stages of this project. We tirelessly communicated through Piazza, email and WeChat to meet and to work. All team members approve our work presented in this GitHub repository including this contributions statement. 
