@@ -40,8 +40,9 @@ get_review_metrics <- function(movie,id){
   metrics
 }
 
+
 #finally we calculate the similarity of two given movies:
-get_similarity <- function(movie1,movie2){
+get_similarity <- function(movie1){
   #get the common reviewer of the two movies:
   id <- common_reviewers_by_id(movie1, movie2)
   #in case the two movies have no common reviewers???
@@ -72,14 +73,31 @@ get_similarity <- function(movie1,movie2){
   }
   similarity
   }
-  }
-  
+}
+
   
 #########################################
 ########### the implementation ##########
 #########################################
 
-  
+#Scenario1: USE APPLY FUNCTION + ALL THE MOVIES
+movie2<-"Inception"
+system.time(similarity<-sapply(as.matrix(unique(data[,"V1.1"])),get_similarity))
+similarity <- na.omit(similarity)
+names(similarity[which.max(similarity)])
+
+
+
+#Scenario2: USE APPLY FUNCTION + MOVIES WITH THE SAME GENRE
+movie2<-"The Last Samurai"
+index<-which(data[,"V1.1"]==movie2)[1]
+data2<-data[which(data[,"V2"]==data[index,"V2"]),]
+system.time(similarity<-sapply(as.matrix(unique(data2[,"V1.1"])),get_similarity))
+similarity <- na.omit(similarity)
+names(similarity[which.max(similarity)])
+
+
+#Scenario3: USE FOR LOOP + ALL MOVIES
   #now given a movie we try to find the one which has the greatest similarity to it:
   movie2<-"Brokeback Mountain"
 
@@ -100,11 +118,8 @@ get_similarity <- function(movie1,movie2){
   #record the time consumed  
   ptm <- proc.time()
   
-  ###################
-  #Remains to improve:
-  #The minimum number of common users
-  #If we could stop the current loop as soon as we discover an NA.
 
+#Scenario4: USE FOR LOOP + MOVIES WITH THE SAME GENRE
   
   #if we only focus on the movie with the same genere:
   #which really saves time
@@ -122,3 +137,9 @@ get_similarity <- function(movie1,movie2){
   }
   similarity <- na.omit(similarity)
   similarity[which.max(similarity[,2]),1]
+
+  
+  ###################
+  #Remains to improve:
+  #The minimum number of common users
+  #If we could stop the current loop as soon as we discover an NA.
