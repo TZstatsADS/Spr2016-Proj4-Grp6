@@ -28,9 +28,8 @@ Thus, the group created an interactive Shiny app, where consumers can input what
 To direct how to carry out our algorithm, as well as take into account the vast amoutn of psycology that occurs with movie watching preferences, we did both an exploratory analysis on the movie industry, as well as the data set provided.
 
 ##General Background
-When looking at current research available for movie watching habits, Google and Millward Brown Digital teamed up to carry out a very indepth study of people and their movie watching habits. What struck us the most and influenced our decisions moving forward were the following two things:
+When looking at current research available for movie watching habits, Google and Millward Brown Digital teamed up to carry out a very indepth study of people and their movie watching habits. **What struck us the most and influenced our decisions** moving forward were the following two things:
 
-1.
 ![Movie Infographic](https://consequenceofsound.files.wordpress.com/2014/11/screen-shot-2014-11-23-at-1-48-13-pm.png?w=797)
 
 Taking these into account, we had ready information for plot/genre, as well as review score, two core factors that certain groups of movie watchers deemed important.
@@ -45,6 +44,7 @@ This is very applicable in propelling us to provide a movie reccommendation app,
 The following packages were used in our project
 
 ```{r, message=FALSE, warning=FALSE}
+#Insert
 
 ```
 
@@ -55,6 +55,8 @@ INSERT DATA CLEANING STEPS
 NICOLE INSERT YOUR DATA RESULTS AND GRAPHS HERE!!
 
 ##Amazon API
+![Amazon API](https://python-amazon-product-api.readthedocs.org/en/0.2.3/_images/banner.png)
+
 INSERT HOW WE USED API
  
 ##XML Parsing
@@ -62,7 +64,7 @@ INSERT HERE
 
 
 #The Reccommendation System
-##The Basic Idea behind finding "similar" movies
+##The Basic Idea Behind Finding "Similar" Movies
 How does someone justify what a "similar" movie is? Is it determined by genre? By actors, or directors? 
 In our alogirthm development, we started with our finalized dataset, which looks like such:
 
@@ -80,13 +82,15 @@ What we determined was that if the scores of two movies are close (taking into a
 To aid in accuracy, under this overarching direction, we finally decided to focus on **users who have watched both movies, and take both their scores**, and of course, all under the umbrella of the same genre as the inputted movie.
 
 ##The Functions
-###The first Function gives users who rated common movies
+###The First Function 
+This function gives users who rated common movies
 ```{r}
 #Insert
 
 ```
 
-###The Second Function gives the ratings of the common reviews
+###The Second Function 
+This function gives the rating scores of the common reviews
 ```{r}
 #Insert
 ```
@@ -115,7 +119,10 @@ We would also love to expand into searching by *director, cast members, or sount
 Looking into an app that gives multiple output suggestions would also be preferred.
 
 #The App
-To demonstrate the app, we will show you what happens if you look into **"The Last Samurai"**
+To demonstrate the app, we will show you what happens if you look into **The Last Samurai**
+
+![Last Samurai Demo](https://upload.wikimedia.org/wikipedia/en/c/c6/The_Last_Samurai.jpg)
+
 
 The code that the app is executing is here:
 ```{r}

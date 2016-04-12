@@ -23,4 +23,3 @@ In this project, we will explore relational data where the data were collected t
 ##Contribution Statement
 
 All team members contributed in all stages of this project. We tirelessly communicated through Piazza, email and WeChat to meet and to work. All team members approve our work presented in this GitHub repository including this contributions statement. 
-
