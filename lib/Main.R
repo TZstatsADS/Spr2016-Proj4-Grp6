@@ -11,6 +11,7 @@ library(Biostrings)
 
 ## Read in data, source func
 load("matData.RData")
+load("name.RData")
 source("../lib/find.R")
 source("../lib/findWithTypo.R")
 

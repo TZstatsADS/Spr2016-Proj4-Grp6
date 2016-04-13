@@ -251,10 +251,34 @@ Within the app, when a user inputs a complete movie name, we calculate its simil
 #The App
 For the algorithm formulation, we used both Python and R.
 
-*See Main.R for the executable code*
+*See Main.R for the executable code; much was done in python and was not compatible for the presentation*
 
 ##The Trials and Errors
-INSERT ATTEMPTS
+Besides formatting the actual interface, we spent a signicant amount of time trying to optimize **how** users search for a movie.
+
+- By the full name? Or just part of a name?
+- When does the algorithm start searching? At each successive character, or after the full title?
+- Can we search by director, or other aspects?
+- How do we match what is searched to the data (like with special characters, capitalization, typos, or Pronouns)?
+
+##Starting: Word Alignment
+We read in movie names
+`
+##BiPartite
+We played around with a variety of methods, but will review here only the ones that really shaped how we moved forward.
+
+##Spell Checker
+
+##Find With Typo
+Find a movie when you have a typo (compares all the words already in movie names to find a match)
+
+To word:
+separate search that you put in (split into separate words)
++ in any order 
+
+To charcter:
+Splitting words into characters
+(subfunction for spellcheck)
 
 ##When to Search
 
