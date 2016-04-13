@@ -1,9 +1,9 @@
-## rm(list=ls())
+rm(list=ls())
 ## NOTE: TO RUN THE SEARCH CODE
 ## YOU WILL HAVE TO USE YOUR OWN API ACCESS INFO
 library("XML")
 library("RCurl")
-search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup = 'ItemAttributes', Operation = 'ItemSearch'){
+search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup, Operation = 'ItemSearch'){
   library(digest)
   library(RCurl)
   
@@ -152,23 +152,58 @@ search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecr
   return(AmazonResult)
 }
 
-gg<-search.amazon(Keywords="KEYWORDS",AWSAccessKeyId="AWSAccessKeyI",AWSsecretkey="AWSsecretkey", AssociateTag="AssociateTag")
+###Function for Movie Poster:
+Keywords="B003AI2VGA"
+AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q"
+AWSsecretkey="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"
+AssociateTag="jzjz-20"
+
+getPicture<-function(productid){
+  productid<-as.character(productid)
+  gg<-search.amazon(Keywords=productid,ResponseGroup = 'Images',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
+  doc<-xmlParse(gg)
+  picnode = xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
+  picvalue<-as.character(sapply(xmlChildren(picnode), function(node) xmlValue(node)))
+  return(picvalue[1])
+}
+
+getPicture(Keywords)
+
+
+
+
+###Function for Director:
+getDirector<-function(productid){
+  productid<-as.character(productid)
+  gg<-search.amazon(Keywords=productid,ResponseGroup = 'Images',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
+  doc<-xmlParse(gg)
+  picnode = xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
+  picvalue<-as.character(sapply(xmlChildren(picnode), function(node) xmlValue(node)))
+  return(picvalue[1])
+}
+
+getPicture(Keywords)
 doc<-xmlParse(gg)
-output<-function(att){
+getInfo<-function(productid,att){
+  productid<-as.character(productid)
+  gg<-search.amazon(Keywords=productid,ResponseGroup = 'ItemAttributes',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
+  doc<-xmlParse(gg)
   attnode = xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][[att]]
   attvalue<-as.character(sapply(xmlChildren(attnode), function(node) xmlValue(node)))
   return(attvalue)
 }
+director<-getInfo(Keywords,"Director")
+actor<-getInfo(Keywords,"Actor")
 
-tryCatch({
-  title<- output("Title")
-  },
-  error =function(err){title<-NA})
-
-tryCatch({
-  genre<-output("Genre")
-},
-error =function(err){genre<-NA})
+#####Read as NA if no Genre/Title
+# tryCatch({
+#   title<- output("Title")
+#   },
+#   error =function(err){title<-NA})
+# tryCatch({
+#   genre<-output("Genre")
+# },
+# error =function(err){genre<-NA})
 
 
 # actors<-output("Actor")
