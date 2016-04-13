@@ -233,7 +233,7 @@ We ran the code in 4 different scenarios:
 3. Use For-Loop and all movies
 4. Use For-Loop and movies with same genre
 
-The **for-loop with same genre** performed best qualitatively, but it is slower (takes about 2-3 seconds for a reccomendation)
+The **for-loop with same genre** performed best qualitatively, which is the fastest within the four scenarios, but still slow (takes about 2-3 seconds for a reccomendation).
 
 ##Implementation
 
