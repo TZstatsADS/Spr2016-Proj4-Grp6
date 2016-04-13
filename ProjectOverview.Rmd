@@ -120,7 +120,7 @@ To determine which factors should be used in what should be consdiered similar, 
 ##Why Review Score?
 - If the scores of two movies are close (taking into account number of reviews), then the movies can be determined to be similar in appeal.
 
-- By taking into account number of reviews (weighted), and keeping Genre constant, we get more accuracy.
+- By taking into account number of reviews (weighted by the helpness of every single review), and keeping Genre constant, we get more accuracy.
 
 **Final Metric For Similarity**
 
@@ -133,9 +133,6 @@ To determine which factors should be used in what should be consdiered similar, 
 This function gives users who rated common movies. Here is some sample code:
 
 ```{r}
-#Currently you must enter the name of the movie with a quotation mark
-#otherwise you will get a warning message: object undefined
-
 #insert two movies, find the common reviewers:
 common_reviewers_by_id <- function(movie1,movie2) {
   reviews1 <- subset(data, V1.1==movie1)
@@ -181,26 +178,7 @@ The sample function to carry out such is as follows:
 
 ```{r}
 get_similarity <- function(movie1){
-  #the first function gives the users who rate both movies
-  common_reviewers_by_id <- function(movie1,movie2) {
-    reviews1 <- subset(data, V1.1==movie1)
-    reviews2 <- subset(data, V1.1==movie2)
-    reviewers_sameset <- intersect(reviews1[,'review_userid'],
-                                   reviews2[,'review_userid'])
-    if (length(reviewers_sameset)<2) {
-      NA
-    }
-    else{
-      reviewers_sameset
-    }
-  }
-  #the second function gives the ratings of these common users
-  get_review_metrics <- function(movie,id){
-    metrics<-subset(data,V1.1== movie & review_userid %in% id)
-    metrics<-metrics[order(unique(metrics$review_userid)),]
-    metrics
-  }
-  
+  #insert represents the movie name that the user types into our app
   id <- common_reviewers_by_id(movie1, insert)
   if (any(is.na(id))) {
     return (NA)
@@ -233,7 +211,7 @@ We ran the code in 4 different scenarios:
 3. Use For-Loop and all movies
 4. Use For-Loop and movies with same genre
 
-The **for-loop with same genre** performed best qualitatively, which is the fastest within the four scenarios, but still slow (takes about 2-3 seconds for a reccomendation).
+The **for-loop with same genre** performed best qualitatively, which is the fastest within the four scenarios, but the speed is still slow (takes about 2-3 seconds for a reccomendation).
 
 ##Implementation
 
@@ -245,6 +223,8 @@ Within the app, when a user inputs a complete movie name, we calculate its simil
 - We would also love to expand into searching by *director, cast members, or sountrack*.
 
 - Looking into an app that gives multiple output suggestions would also be preferred.
+
+- Trying to decide the correct movie names when the user's input involves typo.
 
 ***
 
