@@ -28,29 +28,22 @@ Thus, the group created an interactive Shiny app, where consumers can input what
 To direct how to carry out our algorithm, as well as take into account the vast amoutn of psycology that occurs with movie watching preferences, we did both an exploratory analysis on the movie industry, as well as the data set provided.
 
 ##General Background
-When looking at current research available for movie watching habits, Google and Millward Brown Digital teamed up to carry out a very indepth study of people and their movie watching habits. **What struck us the most and influenced our decisions** moving forward were the following two things:
+When looking at current research available for movie watching habits, `Google and Millward Brown Digital` teamed up to carry out a very in-depth study of people and their movie watching habits. 
+
+**Two Big Take-Aways:**
 
 ![Movie Infographic](https://consequenceofsound.files.wordpress.com/2014/11/screen-shot-2014-11-23-at-1-48-13-pm.png?w=797)
 
+And:
+
+**70% of moviegoers don't actually choose the movie the'll see until they're at the theater**
+
 Taking these into account, we had ready information for plot/genre, as well as review score, two core factors that certain groups of movie watchers deemed important.
-
-Additionally, the following statistic very much influenced how we moved forward:
-
-- **70% of moviegoers don't actually choose the movie the'll see until they're at the theater**
 
 This is very applicable in propelling us to provide a movie reccommendation app, which would help both movie-goers in theaters (becuase you can rate movies on Amazon through pre-order dvds after people saw it in theater), and people at home.
 
 #Setting Up The Environment: Introducing The Data
-##Data Exploration
-NICOLE INSERT YOUR DATA RESULTS AND GRAPHS HERE!!
-
-###The 0 Review Movies
-INSERT
-
-###The Five Star Reviews
-INSERT
-
-##Packages Used
+## Data Packages Used
 The following packages were used in our project
 
 ```{r, message=FALSE, warning=FALSE}
@@ -63,7 +56,94 @@ library(bitops)
 library(RCurl)
 library(digest)
 library(data.table)
+library(plotrix)
+
 ```
+
+##Data Exploration
+
+###The Big picture
+
+We can see that 5-star reviews make up a significant amount more than 1-4 star reviews. 
+
+The count values of 1-5 star reviews are:
+```{r, echo=FALSE}
+#Clean the data set
+movies <- read.csv("C:\\Users\\NMLJ\\Documents\\GitHub\\project4-team6\\data\\datawithnameandgenre.csv", header= TRUE)
+movies <- movies[,-1]
+movies <- movies[,-1]
+attach(movies)
+
+#Separate Out the Review score as a factor
+movies$review_score <- as.factor(review_score)
+
+#Look at its distribution
+summary(movies$review_score)
+```
+
+###Review Distributions
+These counts look pretty small though! The true proportion of reviewed movies out of all movies total is only:
+
+```{r, echo=FALSE}
+library(plotrix)
+sum.tot <- 129148
+#The total of movies with reviews is only 129148
+
+prop1 <- 5212/sum.tot
+prop2 <- 2553/sum.tot
+prop3 <- 3282/sum.tot
+prop4 <- 6451/sum.tot
+prop5 <- 16636/sum.tot
+
+review.prop <- c(prop1,prop2,prop3,prop4,prop5)
+review.label <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star")
+names(review.label) <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star")
+
+#The proprotion of movies with reviews is only 26%
+sum(review.prop)
+
+```
+
+So, movies with reviews only make up **26%** of the entire data set. 
+
+```{r}
+prop1 <- 5212/sum.tot
+prop2 <- 2553/sum.tot
+prop3 <- 3282/sum.tot
+prop4 <- 6451/sum.tot
+prop5 <- 16636/sum.tot
+
+```
+
+1-Star reviews make up `4%` of the movies. 2-Star reviews make up `1.976%` of the movies. 3-Star reviews are `2.54%` of the movies, 4-star reviews are `4.99%` of the movies, and 5-star reviews are `12.88%`
+
+What does this look like graphically? With **only the reviewed movies**, this is the distribution:
+
+```{r,echo=FALSE}
+
+review.prop <- c(prop1,prop2,prop3,prop4,prop5)
+review.label <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star")
+
+names(review.label) <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star")
+
+pie_review <- pie3D(review.prop, labels= names(review.label), col=colorspace::rainbow_hcl(5), main="Proportions of Subsetted Reviews")
+
+```
+
+
+But, with **all of the movies** in total, we see that the proportion of reviewed movies is siginificantly less:
+
+```{r, echo=FALSE}
+new.review.prop  <- c(review.prop, .74)
+new.review.label <- c("1 star", "2 Star","3 Star", "4 Star", "5 Star", "0 Star")
+names(new.review.label) <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star", "0 Star")
+
+pie_total <- pie3D(new.review.prop, labels= names(new.review.label), col=colorspace::heat_hcl(6), main="Proportions of All Reviews")
+
+```
+
+
+Thus, as we move forward, we need to be aware that the data we are using is only a small proportion of all the available data.
 
 ##Data Cleaning Overview
 1. Import all data from SNAP
@@ -73,7 +153,6 @@ library(data.table)
 3. Preprocessing
   - XML Parsing of desired info (ie: review score)
   - Removing of undesired info (ie: price)
-  - Also adding in director and cast name
   
 4. Cleaning and Subsetting
   - Removed movies with review score of 0 for our algorithm
@@ -84,12 +163,48 @@ library(data.table)
 
 We used the Amazon API to pull information about the reviews and movies based on the SNAP-provided product and review ID's.
 
-We used the API only on the movies that had at least 1 review, which is roughly 1/4 of the provided data.
+We used the API only on the movies that had at least 1 review, which is `26%` of the provided data.
+This was done for both:
+* Time
+* For our desired output
 
 The cap for Amazon was at 3,600 calls an hour, so this took us about 13 hours to run the subsetted data.
 
+###Sample Query Result:
+Here is an example of what we get for ItemAttribute:
+```{xml}
+  </Items>
+    </Item>
+      <ItemAttributes>
+        <Actor>Minnie Driver</Actor>
+        ....
+        <Director>Kevin James Dobson</Director>
+        <Genre>Drama</Genre>
+        <Title>The Virgin of Juarez</Title>
+      </ItemAttributes>
+    </Item>
+  </Items>
+```
+- We take `Title` of all movies so that our customers can search by title; `Genre` is another thing that we think is helpful to our analysis.  It may seem quite simple, but infact  **not every movie has a genre recorded**  which is kind of interesting...
+
+* `Actor`, `Director` are also useful information, but due to limied time we did not take these into consideration when recommending movies.
+
+* We can also fetch the poster of the movie from Amazon API, but we did not manage to integrate them into our ShinyApp.
+
+* These codes are avalable in our `api_access.r`,
+
 ##XML Parsing
 The XML parsing was our main source of preprocessing. This "separated" out the information we wanted on each of the movies, and formatted it in a way we could manipulate in R. We also removed factors and information that we would not be using in our algorithm or analysis. 
+
+* The usual XPATH didn't work, so we parsed our results by accesing every node:
+```{r, eval=FALSE}
+
+xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
+```
+* (There must be a more efficient way; Any comments or advice welcome) Our source for how we carried this out can be found in this textbook:
+
+* __XML and Web Technologies for Data Sciences with R__  [Check Out This Book Here!](http://link.springer.com/book/10.1007%2F978-1-4614-7900-0)  
+Authors: Deborah Nolan, Duncan Temple Lang  
 
 ***
 
@@ -112,8 +227,6 @@ The covariates are:
 - Review Score
 - Name of Movie
 - Review Score 
-- Director Name
-- Actor Cast
 
 To determine which factors should be used in what should be consdiered similar, after trying a few methods and seeing what type of results we got, we decided on using **Reviewer's Score**
 
@@ -237,7 +350,7 @@ The **for-loop with same genre** performed best qualitatively, but it is slower 
 
 ##Implementation
 
-Within the app, when a user inputs a complete movie name, we calculate its similarity using our algorithm within all other movies of the same Amazon-labeled genre. Then, the app ranks the similarity values, and gives the movie which shares the greatest similarity with the user's input.
+Within the app, when a user inputs a complete movie name, we calculate its similarity using our algorithm within all other movies of the same Amazon-labeled genre. **Then, the app ranks the similarity values, and gives the movie which shares the greatest similarity with the user's input. **
 
 ##How to Improve For The Future
 - In the future, we would like to be able to expand to movies of similar genres as well (rather than just the same genre), but processing and computation time took too long.
@@ -258,43 +371,27 @@ Besides formatting the actual interface, we spent a signicant amount of time try
 
 - By the full name? Or just part of a name?
 - When does the algorithm start searching? At each successive character, or after the full title?
-- Can we search by director, or other aspects?
 - How do we match what is searched to the data (like with special characters, capitalization, typos, or Pronouns)?
 
-##Starting: Word Alignment
-We read in movie names
-`
-##BiPartite
-We played around with a variety of methods, but will review here only the ones that really shaped how we moved forward.
+###The attempts and functions used
 
-##Spell Checker
+* `Word Alignment` (To format how words and characters enter the search bar and are read)
 
-##Find With Typo
-Find a movie when you have a typo (compares all the words already in movie names to find a match)
+* `BiPartite` (A package that provides functions to visualize webs and describe patterns. we were hoping this would give insight in hwo to improve search terms)
 
-To word:
-separate search that you put in (split into separate words)
-+ in any order 
+* `Spell Checker` and `Find With Typo` (Which would allow us to find a movie when we have a typo. It compares all the words already in movie names to find a match )
 
-To charcter:
-Splitting words into characters
-(subfunction for spellcheck)
+* `To word` (Separates out the words that we put in, to allow searching of the words in any order)
 
-##When to Search
+* `To character` (Splits words into characters, a subfunction for spellcheck)
 
-Bipartite
-
-INSERT PROBLEM WITH SEARCH WORDS vs CHARACTERS
+In the end, we kept versions of findWithTypo, spellCheck, toCharacter and toWord.  These functions can be found in the `Final` folder
 
 ##The Demo
-To demonstrate the app, we will show you what happens if you look into **The Last Samurai**
+To demonstrate the app, we will show you what happens if you look into **The Last Samurai**, and we will also show you what happens if you input **non-movie names**.
 
 ![Last Samurai Demo](https://upload.wikimedia.org/wikipedia/en/c/c6/The_Last_Samurai.jpg)
 
 
-The code that the app is executing is here:
-```{r}
-#Insert
-```
 
 

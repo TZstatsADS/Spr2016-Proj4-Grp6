@@ -4,23 +4,72 @@ author: "Nicole LaPointe Jameson"
 date: "April 13, 2016"
 output: html_document
 ---
-#Big picture
+##The Big picture
 
-```{r}
-#INSERT
+```{r, echo=FALSE}
+#Clean the data set
+movies <- read.csv("C:\\Users\\NMLJ\\Documents\\GitHub\\project4-team6\\data\\datawithnameandgenre.csv", header= TRUE)
+movies <- movies[,-1]
+movies <- movies[,-1]
+attach(movies)
+
+#Separate Out the Review score as a factor
+movies$review_score <- as.factor(review_score)
+
+#Look at its distribution
+summary(movies$review_score)
+print(summary(movies$review_score))
+
+```
+
+We can see that 5-star reviews make up a significant amount more than 1-4 star reviews. 
+
+##Review Distributions
+
+However, it must be noted that movies with reviews only make up **26%** of the entire data set.  By looking at proportions of the review scores, we produce the following:
+
+```{r, echo=FASLE}
+sum.tot <- sum(review_score)
+sum.tot
+#The total of movies with reviews is only 129148
+
+review.prop <- c(prop1,prop2,prop3,prop4,prop5)
+names(review.label) <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star")
+
+prop1 <- 5212/sum.tot
+prop1 *100
+prop2 <- 2553/sum.tot
+prop2 *100
+prop3 <- 3282/sum.tot
+prop3*100
+prop4 <- 6451/sum.tot
+prop4*100
+prop5 <- 16636/sum.tot
+prop5*100
+#The proprotion of movies with reviews is only 26%
+sum(review.prop)
 
 ```
 
+1-Star reviews make up `4%` of the movies. 2-Star reviews make up `1.976%` of the movies. 3-Star reviews are `2.54%` of the movies, 4-star reviews are `4.99%` of the movies, and 5-star reviews are `12.88%`
 
-##Movies with no reviews
+What does this look like graphically? With **only the reviewed movies**, this is the distribution:
+
+```{r,echo=FALSE}
+pie_review <- pie3D(review.prop, labels= names(review.label), col=colorspace::rainbow_hcl(5), main="Proportions of Subsetted Reviews")
+
+```
+
+![Subset Reviews](http://eastridgecenter.com/wp-content/uploads/2016/03/Movie-Releases.jpg)
+
+But, with all of the movies in total:
 ```{r}
-#Insert
+new.review.prop  <- c(review.prop, .74)
+new.review.label <- c("1 star", "2 Star","3 Star", "4 Star", "5 Star", "0 Star")
+names(new.review.label) <- c("1 Star", "2 Star","3 Star", "4 Star", "5 Star", "0 Star")
 
+pie_total <- pie3D(new.review.prop, labels= names(new.review.label), col=colorspace::heat_hcl(6), main="Proportions of All Reviews")
 
 ```
 
-##Movies with 5-star reviews
-```{r}
-#H
-
-```
+![All Review](http://eastridgecenter.com/wp-content/uploads/2016/03/Movie-Releases.jpg)
