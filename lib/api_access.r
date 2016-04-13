@@ -153,10 +153,10 @@ search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecr
 }
 
 ###Function for Movie Poster:
-Keywords="B003AI2VGA"
-AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q"
-AWSsecretkey="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"
-AssociateTag="jzjz-20"
+Keywords=productID
+AWSAccessKeyId=AWSAccessKeyId
+AWSsecretkey=AWSsecretkey
+AssociateTag=AssociateTag
 
 getPicture<-function(productid){
   productid<-as.character(productid)
