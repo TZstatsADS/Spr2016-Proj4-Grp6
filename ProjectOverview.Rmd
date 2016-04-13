@@ -316,8 +316,8 @@ Here is an example of what we get for ItemAttribute:
 * We take `Title` of all movies so that our customers can search by title; `Genre` is another thing that we think is helpful to our analysis.  It may seem quite simple, but infact NOT EVERY MOVIE HAS A GENRE RECORD, which is kind of interesting...
 
 * `Actor`, `Director` are also useful information, but due to limied time we did not take these into consideration when recommending movies.   
-  __But these information goes into our ShinyApp!__
-* We also fetch the poster of the movie our customer is searching for using keyworkd `Image`.
+* We can also fetch the poster of the movie from Amazon API, but we did not manage to integrate them into our ShinyApp.
+* These codes are avalable in our api_access.r,
 
 
 
