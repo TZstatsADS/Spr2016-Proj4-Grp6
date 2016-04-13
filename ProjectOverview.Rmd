@@ -374,37 +374,6 @@ To demonstrate the app, we will show you what happens if you look into **The Las
 
 
 
---------
-#### Sample Query Result:
-Here is an example of what we get for ItemAttribute:
-```{xml}
-  </Items>
-    </Item>
-      <ItemAttributes>
-        <Actor>Minnie Driver</Actor>
-        ....
-        <Director>Kevin James Dobson</Director>
-        <Genre>Drama</Genre>
-        <Title>The Virgin of Juarez</Title>
-      </ItemAttributes>
-    </Item>
-  </Items>
-```
-* We take `Title` of all movies so that our customers can search by title; `Genre` is another thing that we think is helpful to our analysis.  It may seem quite simple, but infact NOT EVERY MOVIE HAS A GENRE RECORD, which is kind of interesting...
 
-* `Actor`, `Director` are also useful information, but due to limied time we did not take these into consideration when recommending movies.   
-* We can also fetch the poster of the movie from Amazon API, but we did not manage to integrate them into our ShinyApp.
-* These codes are avalable in our api_access.r,
-
-
-
-#### XML Parsing:
-* The usual XPATH didn't work, so we parsed our results by accesing every node:
-```{r}
-xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
-```
-* There must be an efficient way! Any comments welcomed!  
-__XML and Web Technologies for Data Sciences with R__  [Check Out This Book Here!](http://link.springer.com/book/10.1007%2F978-1-4614-7900-0)  
-Authors: Deborah Nolan, Duncan Temple Lang  
 
 
