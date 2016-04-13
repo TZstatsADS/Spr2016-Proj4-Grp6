@@ -1,4 +1,6 @@
-rm(list=ls())
+## rm(list=ls())
+## NOTE: TO RUN THE SEARCH CODE
+## YOU WILL HAVE TO USE YOUR OWN API ACCESS INFO
 library("XML")
 library("RCurl")
 search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup = 'ItemAttributes', Operation = 'ItemSearch'){
@@ -150,18 +152,28 @@ search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecr
   return(AmazonResult)
 }
 
-gg<-search.amazon(Keywords="B003AI2VGA",AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q",AWSsecretkey="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", AssociateTag="jzjz-20")
+gg<-search.amazon(Keywords="KEYWORDS",AWSAccessKeyId="AWSAccessKeyI",AWSsecretkey="AWSsecretkey", AssociateTag="AssociateTag")
 doc<-xmlParse(gg)
 output<-function(att){
   attnode = xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][[att]]
   attvalue<-as.character(sapply(xmlChildren(attnode), function(node) xmlValue(node)))
   return(attvalue)
 }
-title<-output("Title")
-genre<-output("Genre")
+
+tryCatch({
+  title<- output("Title")
+  },
+  error =function(err){title<-NA})
+
+tryCatch({
+  genre<-output("Genre")
+},
+error =function(err){genre<-NA})
+
+
 # actors<-output("Actor")
 # Might need to bind PRODUCT ID
-product_i<-cbind(title,genre)
+# product_i<-cbind(title,genre)
 
 # Example of getting an info
 # titlenode=xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][["Title"]]
