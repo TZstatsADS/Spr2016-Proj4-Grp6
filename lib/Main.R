@@ -11,9 +11,14 @@ library(Biostrings)
 
 ## Read in data, source func
 load("matData.RData")
+<<<<<<< HEAD
+source("find.R")
+source("findWithTypo.R")
+=======
 load("name.RData")
 source("../lib/find.R")
 source("../lib/findWithTypo.R")
+>>>>>>> origin/master
 
 ## Try out to find a movie
 find("great")

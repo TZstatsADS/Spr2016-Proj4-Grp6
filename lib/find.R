@@ -1,4 +1,7 @@
 # Set up 
+<<<<<<< HEAD
+
+=======
 source("../lib/toWord.R")
 source("../lib/vIn.R")
 # Plug in easter eggs
@@ -18,6 +21,7 @@ movies = levels(matData$name)
 movies = c(movies, eggs)
 moviesW = sapply(movies,toWord)
 ## Public func
+>>>>>>> origin/master
 find = function(key){
   findP(key,moviesW,movies)
 }
