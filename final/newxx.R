@@ -1,9 +1,9 @@
-rm(list=ls())
-## NOTE: TO RUN THE SEARCH CODE
-## YOU WILL HAVE TO USE YOUR OWN API ACCESS INFO
 library("XML")
+library("bitops")
 library("RCurl")
-search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup, Operation = 'ItemSearch'){
+library("digest")
+library("data.table")
+search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecretkey, AssociateTag, ResponseGroup = 'ItemAttributes', Operation = 'ItemSearch'){
   library(digest)
   library(RCurl)
   
@@ -152,63 +152,101 @@ search.amazon <- function(Keywords, SearchIndex = 'All', AWSAccessKeyId, AWSsecr
   return(AmazonResult)
 }
 
-###Function for Movie Poster:
-Keywords="B003AI2VGA"
-AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q"
-AWSsecretkey="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"
-AssociateTag="jzjz-20"
+newinfo <- 1
+productnew <- matrix(nrow=34134, ncol=2)
 
-getPicture<-function(productid){
-  productid<-as.character(productid)
-  gg<-search.amazon(Keywords=productid,ResponseGroup = 'Images',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
-  doc<-xmlParse(gg)
-  picnode = xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
-  picvalue<-as.character(sapply(xmlChildren(picnode), function(node) xmlValue(node)))
-  return(picvalue[1])
+for (i in 1 :  34134){
+  
+  newinfo[i] <- search.amazon(Keywords=newdata$product_productid[i],AWSAccessKeyId="AKIAJCYPY2UUDPZA6W2Q",AWSsecretkey="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", AssociateTag="jzjz-20")
+  print(i)
+  Sys.sleep(1)
+  doc<-xmlParse(newinfo[i])
+  output<-function(att){
+    attnode = xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][[att]]
+    attvalue<-as.character(sapply(xmlChildren(attnode), function(node) xmlValue(node)))
+    return(attvalue)
+  }
+  tryCatch({
+    title<- output("Title")
+  },
+  error =function(err){title<-NA})
+  tryCatch({
+    genre<-output("Genre")
+  },
+  error =function(err){genre<-NA})
+  # Might need to bind PRODUCT ID
+  productnew[i,1] <- title
+  productnew[i, 2] <- genre
 }
 
-getPicture(Keywords)
+
+
+View(newinfo[1])
+newdata <- amazondata[amazondata$review_helpfulness != "0/0" ]
+for (i in 0:999) {
+  itera <- paste0("0/", i)
+  newdata <- newdata[newdata$review_helpfulness != itera ]
+  
+}
+lessdata<- newdata
+lessdata <-  lessdata[lessdata$review_helpfulness != "1/1" ]
+lessdata <-  lessdata[lessdata$review_helpfulness != "1/2" ]
+lessdata <-  lessdata[lessdata$review_helpfulness != "2/2" ]
+lessdatakey <- lessdata$product_productid
 
 
 
 
-###Function for Director:
-getDirector<-function(productid){
-  productid<-as.character(productid)
-  gg<-search.amazon(Keywords=productid,ResponseGroup = 'Images',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
-  doc<-xmlParse(gg)
-  picnode = xmlRoot(doc)[["Items"]][["Item"]][["ImageSets"]][["ImageSet"]][["MediumImage"]]
-  picvalue<-as.character(sapply(xmlChildren(picnode), function(node) xmlValue(node)))
-  return(picvalue[1])
+sappley(newdata, class)
+newdata$review_helpfulness <- as.numeric(newdata$review_helpfulness)
+type.convert(newdata$review_helpfulness)
+
+length(newdata$review_helpfulness)
+
+for ( i in 1: length(newdata$review_helpfulness)){
+  newdata$review_helpfulness[i] <- type.convert(newdata$review_helpfulness[i])
 }
 
-getPicture(Keywords)
-doc<-xmlParse(gg)
-getInfo<-function(productid,att){
-  productid<-as.character(productid)
-  gg<-search.amazon(Keywords=productid,ResponseGroup = 'ItemAttributes',AWSAccessKeyId=AWSAccessKeyId,AWSsecretkey=AWSsecretkey, AssociateTag=AssociateTag)
-  doc<-xmlParse(gg)
+setwd("C:/Users/ouwen/Downloads/")
+library("data.table")
+
+newdata <- fread("C:/Users/ouwen/Downloads/newdata.csv")
+
+newinfo1 <- fread("newinfo1.csv")
+newinfo2 <- fread("newinfo2.csv")
+newinfo3 <- fread("newinfo3.csv")
+amazondata <- fread("C:/Users/ouwen/Downloads/moviescsv.csv")
+
+setwd("C:/Users/ouwen/Downloads/")
+write.csv(newdata, file = "newdata.csv")
+
+
+newinfo[3411]
+
+write.csv(newkk, file = "datawithnameand genre.csv")
+write.csv(newinfo, file = "rawfromamazon.csv")
+
+write.csv(newinfo, file = "amazonretrieved.csv")
+
+
+
+
+doc<-xmlParse(newinfo)
+output<-function(att){
   attnode = xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][[att]]
   attvalue<-as.character(sapply(xmlChildren(attnode), function(node) xmlValue(node)))
   return(attvalue)
 }
-director<-getInfo(Keywords,"Director")
-actor<-getInfo(Keywords,"Actor")
+title<-output("Title")
+genre<-output("Genre")
+# Might need to bind PRODUCT IDprodu
+product_i<-cbind(title,genre,language,rate)
 
-#####Read as NA if no Genre/Title
-# tryCatch({
-#   title<- output("Title")
-#   },
-#   error =function(err){title<-NA})
-# tryCatch({
-#   genre<-output("Genre")
-# },
-# error =function(err){genre<-NA})
-
-
-# actors<-output("Actor")
+# Example of getting an info
+language<-output("Languages")
+rate<-output("AudienceRating")
 # Might need to bind PRODUCT ID
-# product_i<-cbind(title,genre)
+product_i<-cbind(title,genre,language,rate)
 
 # Example of getting an info
 # titlenode=xmlRoot(doc)[["Items"]][["Item"]][["ItemAttributes"]][["Title"]]

@@ -1,7 +1,4 @@
-## Set up
-source("../lib/align.R")
-source("../lib/toCharacter.R")
-source("../lib/spellCheck.R")
+
 ## Build dictionary
 dic = do.call(c,moviesW) %>%
   as.factor() %>%
