@@ -1,0 +1,276 @@
+---
+title: 'Project 4: The Movie For You!'
+author: "Team 6: Ouwen, Jingying, Yanyu, Ao, Nicole"
+date: "April 13, 2016"
+output: 
+  html_document:
+    theme: spacelab
+    highlight: espresso
+    toc: true
+    toc_float:
+      collapsed: true
+    fontsize: 13pt
+---
+#Introduction and Initial Goals
+![Movies!](http://eastridgecenter.com/wp-content/uploads/2016/03/Movie-Releases.jpg)
+
+In this project focused on *Collective Intelligence Mining*, the group carried out 3 main goals:
+
+1. To discover a succinct methodology for mining Amazon movie reviews.
+
+2. To best display the results and findings of this mining.
+
+3. To produce something others would also find useful and inventive
+
+Thus, the group created an interactive Shiny app, where consumers can input what they like seeing/what they are interested in seeing, and not only get information on that move, but also similar titles to such!
+
+#Exploratory Analysis
+To direct how to carry out our algorithm, as well as take into account the vast amoutn of psycology that occurs with movie watching preferences, we did both an exploratory analysis on the movie industry, as well as the data set provided.
+
+##General Background
+When looking at current research available for movie watching habits, Google and Millward Brown Digital teamed up to carry out a very indepth study of people and their movie watching habits. **What struck us the most and influenced our decisions** moving forward were the following two things:
+
+![Movie Infographic](https://consequenceofsound.files.wordpress.com/2014/11/screen-shot-2014-11-23-at-1-48-13-pm.png?w=797)
+
+Taking these into account, we had ready information for plot/genre, as well as review score, two core factors that certain groups of movie watchers deemed important.
+
+Additionally, the following statistic very much influenced how we moved forward:
+
+- **70% of moviegoers don't actually choose the movie the'll see until they're at the theater**
+
+This is very applicable in propelling us to provide a movie reccommendation app, which would help both movie-goers in theaters (becuase you can rate movies on Amazon through pre-order dvds after people saw it in theater), and people at home.
+
+#Setting Up The Environment: Introducing The Data
+##Data Exploration
+NICOLE INSERT YOUR DATA RESULTS AND GRAPHS HERE!!
+
+###The 0 Review Movies
+INSERT
+
+###The Five Star Reviews
+INSERT
+
+##Packages Used
+The following packages were used in our project
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(XML)
+library(stringr)
+library(tm)
+library(seqinr)
+library(bitops)
+library(RCurl)
+library(digest)
+library(data.table)
+```
+
+##Data Cleaning Overview
+1. Import all data from SNAP
+
+2. Used the Amazon API to pull all the movie data
+
+3. Preprocessing
+  - XML Parsing of desired info (ie: review score)
+  - Removing of undesired info (ie: price)
+  - Also adding in director and cast name
+  
+4. Cleaning and Subsetting
+  - Removed movies with review score of 0 for our algorithm
+  - Kept this information for our exploratory analysis
+
+##Amazon API
+![Amazon API](https://python-amazon-product-api.readthedocs.org/en/0.2.3/_images/banner.png)
+
+We used the Amazon API to pull information about the reviews and movies based on the SNAP-provided product and review ID's.
+
+We used the API only on the movies that had at least 1 review, which is roughly 1/4 of the provided data.
+
+The cap for Amazon was at 3,600 calls an hour, so this took us about 13 hours to run the subsetted data.
+
+##XML Parsing
+The XML parsing was our main source of preprocessing. This "separated" out the information we wanted on each of the movies, and formatted it in a way we could manipulate in R. We also removed factors and information that we would not be using in our algorithm or analysis. 
+
+***
+
+#The Reccommendation System
+##The Basic Idea Behind Finding "Similar" Movies
+How does someone justify what a "similar" movie is? Is it determined by genre? By actors, or directors? 
+In our algorrithm development, we started with our finalized dataset, which looks like such:
+
+```{r, message=FALSE, warning=FALSE}
+data <- read.csv("C:\\Users\\NMLJ\\Documents\\GitHub\\project4-team6\\data\\datawithnameandgenre.csv")
+
+head(data,1)
+```
+
+The covariates are:
+
+- Product ID
+- Review User ID
+- Review Helpfulness
+- Review Score
+- Name of Movie
+- Review Score 
+- Director Name
+- Actor Cast
+
+To determine which factors should be used in what should be consdiered similar, after trying a few methods and seeing what type of results we got, we decided on using **Reviewer's Score**
+
+##Why Review Score?
+- If the scores of two movies are close (taking into account number of reviews), then the movies can be determined to be similar in appeal.
+
+- By taking into account number of reviews (weighted), and keeping Genre constant, we get more accuracy.
+
+**Final Metric For Similarity**
+
+- For users who have watched both movies, take both their weighted scores, all under the umbrella of the same genre as the inputted movie.
+
+##The Functions
+*For full code, please see MovieSimilarity.R*
+
+###The First Function 
+This function gives users who rated common movies. Here is some sample code:
+
+```{r}
+#Currently you must enter the name of the movie with a quotation mark
+#otherwise you will get a warning message: object undefined
+
+#insert two movies, find the common reviewers:
+common_reviewers_by_id <- function(movie1,movie2) {
+  reviews1 <- subset(data, V1.1==movie1)
+  reviews2 <- subset(data, V1.1==movie2)
+  reviewers_sameset <- intersect(reviews1[,'review_userid'],
+                                 reviews2[,'review_userid'])
+  #if 0 common user, print NA
+  #if one common user,then it is the same person, which also makes no sense, print NA
+  if (length(reviewers_sameset)<2) {
+    NA
+  }
+  else{
+    reviewers_sameset
+  }
+  }
+
+```
+
+###The Second Function 
+This function gives the rating scores of the common reviews:
+
+```{r}
+#get review results given the reviewe ID:
+get_review_metrics <- function(movie,id){
+  metrics<-subset(data,V1.1== movie & review_userid %in% id)
+  #reorder the reviewers
+  #there's scenarios when the same user rate the same movie for more than once, causing the two metrics
+  #differ in length, thus, we use unique() to remove duplicate items.
+  metrics<-metrics[order(unique(metrics$review_userid)),]
+  # metrics<-metrics[,c("review_helpfulness","review_score")]
+ # metrics %>% distinct("review_userid")
+  metrics
+}
+
+```
+
+##The Similarity
+To compute the degree of overlap, we solved for the angle theta, as the angle between the two vectors, or movie review scores.
+
+![theta](http://image.mathcaptain.com/cms/images/83/angle-between-two-vectors.png)
+
+The sample function to carry out such is as follows:
+
+```{r}
+get_similarity <- function(movie1){
+  #the first function gives the users who rate both movies
+  common_reviewers_by_id <- function(movie1,movie2) {
+    reviews1 <- subset(data, V1.1==movie1)
+    reviews2 <- subset(data, V1.1==movie2)
+    reviewers_sameset <- intersect(reviews1[,'review_userid'],
+                                   reviews2[,'review_userid'])
+    if (length(reviewers_sameset)<2) {
+      NA
+    }
+    else{
+      reviewers_sameset
+    }
+  }
+  #the second function gives the ratings of these common users
+  get_review_metrics <- function(movie,id){
+    metrics<-subset(data,V1.1== movie & review_userid %in% id)
+    metrics<-metrics[order(unique(metrics$review_userid)),]
+    metrics
+  }
+  
+  id <- common_reviewers_by_id(movie1, insert)
+  if (any(is.na(id))) {
+    return (NA)
+  }else{
+    metrics1 <- get_review_metrics(movie1,id)
+    metrics2 <- get_review_metrics(insert,id)
+    #the helpfulness is multiplied by the corresponding rating score:
+    product <- function(metrics){
+      names <- names(metrics)
+      temp1 <- sapply(as.matrix(metrics[names[1]]), function(x) eval(parse(text=x)))
+      temp2 <- sapply(as.matrix(metrics[names[2]]), function(x) eval(parse(text=x)))
+      temp1*temp2
+    }
+    similarity <- product(metrics1)%*%product(metrics2)/(product(metrics1)%*%product(metrics1)*product(metrics2)%*%product(metrics2))^0.5
+    if (similarity == 1){
+      similarity = NA
+    }
+    similarity
+  }
+}
+
+```
+
+##Tuning and Cross-Validation
+
+We ran the code in 4 different scenarios:
+
+1. Use apply function over all the movies
+2. Use apply function and movies with same genre
+3. Use For-Loop and all movies
+4. Use For-Loop and movies with same genre
+
+The **for-loop with same genre** performed best qualitatively, but it is slower (takes about 2-3 seconds for a reccomendation)
+
+##Implementation
+
+Within the app, when a user inputs a complete movie name, we calculate its similarity using our algorithm within all other movies of the same Amazon-labeled genre. Then, the app ranks the similarity values, and gives the movie which shares the greatest similarity with the user's input.
+
+##How to Improve For The Future
+- In the future, we would like to be able to expand to movies of similar genres as well (rather than just the same genre), but processing and computation time took too long.
+
+- We would also love to expand into searching by *director, cast members, or sountrack*.
+
+- Looking into an app that gives multiple output suggestions would also be preferred.
+
+***
+
+#The App
+For the algorithm formulation, we used both Python and R.
+
+*See Main.R for the executable code*
+
+##The Trials and Errors
+INSERT ATTEMPTS
+
+##When to Search
+
+Bipartite
+
+INSERT PROBLEM WITH SEARCH WORDS vs CHARACTERS
+
+##The Demo
+To demonstrate the app, we will show you what happens if you look into **The Last Samurai**
+
+![Last Samurai Demo](https://upload.wikimedia.org/wikipedia/en/c/c6/The_Last_Samurai.jpg)
+
+
+The code that the app is executing is here:
+```{r}
+#Insert
+```
+
+
