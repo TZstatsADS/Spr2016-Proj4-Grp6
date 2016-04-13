@@ -4,7 +4,7 @@ author: "Nicole LaPointe Jameson"
 date: "April 13, 2016"
 output: html_document
 ---
-##The Big picture
+# The Big picture
 
 ```{r, echo=FALSE}
 #Clean the data set
